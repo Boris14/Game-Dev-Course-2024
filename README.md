@@ -1,3 +1,5 @@
+### Boris Dimitrov 2MI0700041
+
 # Game Dev Course 2021 @ FMI
 
 This is the official repository of the Game Dev Course @ FMI Edition 2022.
