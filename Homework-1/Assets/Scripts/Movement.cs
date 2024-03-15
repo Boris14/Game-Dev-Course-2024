@@ -7,12 +7,12 @@ public class Movement : MonoBehaviour
     float horizontal;
 
     [SerializeField]
-    float speed;
+    float speed = 3;
+
     // Start is called before the first frame update
     void Start()
     {
         horizontal = 0;
-        speed = 3;
     }
 
     // Update is called once per frame
