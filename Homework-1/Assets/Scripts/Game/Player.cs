@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.UIElements;
@@ -11,14 +12,13 @@ public class Player : MonoBehaviour
 
     Rigidbody2D rb2d;
     CapsuleCollider2D coll;
+    Animator anim;
 
     [SerializeField] LayerMask lethalLayer;
     [SerializeField] GameObject respawnPoint;
 
-    public delegate void OnDeathDelegate();
     public delegate void OnAttributeChangedDelegate(int newValue);
 
-    public OnDeathDelegate onDeath;
     public OnAttributeChangedDelegate onHealthChanged;
     public OnAttributeChangedDelegate onKeysChanged;
 
@@ -27,11 +27,18 @@ public class Player : MonoBehaviour
     {
         rb2d = GetComponent<Rigidbody2D>();
         coll = GetComponent<CapsuleCollider2D>();
+        anim = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        anim.SetFloat("Speed", Math.Abs(rb2d.velocity.x));
+        anim.SetFloat("VerticalSpeed", Math.Abs(rb2d.velocity.y));
     }
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        if(((1 << coll.gameObject.layer) & lethalLayer.value) != 0)
+        if(IsGameObjectLethal(coll.gameObject))
         {
             transform.position = respawnPoint.transform.position;
             SetHealth(health - 1);
@@ -45,17 +52,11 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if(((1 << coll.gameObject.layer) & lethalLayer.value) != 0)
+        if(IsGameObjectLethal(coll.gameObject))
         {
             transform.position = respawnPoint.transform.position;
             SetHealth(health - 1);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void SetKeyCount(int newKeyCount)
@@ -66,7 +67,11 @@ public class Player : MonoBehaviour
         }
 
         keys = newKeyCount;
-        onKeysChanged(keys);
+
+        if(onKeysChanged != null)
+        {
+            onKeysChanged(keys);
+        }
     }
 
     public void SetHealth(int newHealth)
@@ -77,12 +82,16 @@ public class Player : MonoBehaviour
         }
 
         health = newHealth;
-        onHealthChanged(health);
 
-        if(health == 0)
+        if(onHealthChanged != null)
         {
-            onDeath();
+            onHealthChanged(health);
         }
+    }
+
+    bool IsGameObjectLethal(GameObject obj)
+    {
+        return ((1 << obj.layer) & lethalLayer.value) != 0;
     }
 }
 

@@ -6,11 +6,6 @@ public class Jump : MonoBehaviour
 {
     bool isJumping = false;
     bool isOnGround = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()

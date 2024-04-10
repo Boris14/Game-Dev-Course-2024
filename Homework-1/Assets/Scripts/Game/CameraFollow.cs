@@ -6,6 +6,7 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField]
     GameObject player;
+    [SerializeField] float speed = 2.0f;
 
     private Vector3 offset;
     // Start is called before the first frame update
@@ -17,6 +18,6 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.Lerp(transform.position, player.transform.position + offset, Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, player.transform.position + offset, Time.deltaTime * speed);
     }
 }

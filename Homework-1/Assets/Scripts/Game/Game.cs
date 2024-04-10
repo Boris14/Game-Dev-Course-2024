@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
+
+    [SerializeField] string gameOverSceneName;
+    [SerializeField] string winSceneName;
+    [SerializeField] int keysToWin = 3;
+
     HUD hud;
     Player player;
 
@@ -14,13 +19,25 @@ public class Game : MonoBehaviour
         hud = GetComponentInChildren<HUD>();
         player = GetComponentInChildren<Player>();
 
-        player.onDeath = OnPlayerDeathHandler;
-        player.onHealthChanged = hud.onHealthChangedHandler;
-        player.onKeysChanged = hud.onKeysChangedHandler;
+        player.onHealthChanged = OnPlayerHealthChangedHandler;
+        player.onHealthChanged += hud.OnHealthChangedHandler;
+        player.onKeysChanged = OnPlayerKeysChangedHandler;
+        player.onKeysChanged += hud.OnKeysChangedHandler;
     }
 
-    void OnPlayerDeathHandler()
+    void OnPlayerHealthChangedHandler(int newHealth)
     {
-        SceneManager.LoadScene("MainMenu");
+        if(newHealth <= 0) 
+        {
+            SceneManager.LoadScene(gameOverSceneName);
+        }
+    }
+
+    void OnPlayerKeysChangedHandler(int keyCount)
+    {
+        if(keyCount >= keysToWin)
+        {
+            SceneManager.LoadScene(winSceneName);
+        }
     }
 }

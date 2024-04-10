@@ -37,7 +37,7 @@ public class HUD : MonoBehaviour
        }
     }
 
-    public void onHealthChangedHandler(int newHealth)
+    public void OnHealthChangedHandler(int newHealth)
     {
         if(newHealth < 0 || newHealth > 3)
         {
@@ -50,7 +50,7 @@ public class HUD : MonoBehaviour
         }
     }
 
-    public void onKeysChangedHandler(int keyCount)
+    public void OnKeysChangedHandler(int keyCount)
     {
         if(keyCount < 0 || keyCount > 3)
         {
